@@ -6,4 +6,7 @@
     <string name="search_button">Search</string>
     <string name="hint">Enter smth...</string>
     <string name="plain_text">Text</string>
+    <string name="submit_button">Submit</string>
+    <string name="title_text">Title</string>
+    <string name="task_text">Task</string>
 </resources>
