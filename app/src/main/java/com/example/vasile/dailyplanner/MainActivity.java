@@ -1,6 +1,8 @@
 package com.example.vasile.dailyplanner;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,14 +12,16 @@ import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int SUBMIT = 1;
     public static final String TAG = "CalendarActivity";
     public static final String DATE = "Date";
     public static final String EXTRA_MESSAGE = "com.example.vasile.dailyplanner";
 
-    public String date = "1997/07/30";
+    public String date = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,6 @@ public class MainActivity extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.editText);
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        startActivityForResult(intent, SUBMIT);
     }
 }
