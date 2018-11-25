@@ -47,8 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void deleteTask(View view) {
-
+    public void ListTasks(View view) {
+        Intent intent = new Intent(this, ListActivity.class);
+        startActivity(intent);
     }
 
     public void searchByKey(View view) {
