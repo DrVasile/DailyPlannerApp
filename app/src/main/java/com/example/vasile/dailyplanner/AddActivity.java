@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.vasile.dailyplanner.db.TaskContract;
@@ -35,6 +36,7 @@ import java.util.Date;
 public class AddActivity extends AppCompatActivity {
 
     private TaskDbHelper mHelper;
+    private String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,23 +44,28 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
 
         Intent incoming = getIntent();
-        String date = "Task for " + incoming.getStringExtra(MainActivity.DATE);
+        date = incoming.getStringExtra(MainActivity.DATE);
+        String headerText = "Task for " + date;
         TextView header = (TextView) findViewById(R.id.textView3);
-        header.setText(date);
+        header.setText(headerText);
     }
 
     public void submitTask(View view) {
-        TextView dateText = (TextView) findViewById(R.id.textView3);
         EditText titleEdit = (EditText) findViewById(R.id.title);
         EditText taskEdit = (EditText) findViewById(R.id.description);
+        TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
 
         mHelper = new TaskDbHelper(this);
         String task = String.valueOf(taskEdit.getText());
-        String date = String.valueOf(dateText.getText());
         String title = String.valueOf(titleEdit.getText());
+        /* time is in the format yyyy/MM/dd-HH:mm */
+        String time =  date + "-" + String.valueOf(timePicker.getHour()) + ":" + String.valueOf(timePicker.getMinute());
+
         SQLiteDatabase db = mHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
+        values.put(TaskContract.TaskEntry.COL_TASK_TITLE, title);
+        values.put(TaskContract.TaskEntry.COL_TASK_CONTENT, task);
+        values.put(TaskContract.TaskEntry.COL_TASK_DATE, time);
         db.insertWithOnConflict(TaskContract.TaskEntry.TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
 

@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">DailyPlanner</string>
+
     <string name="add_button">Add</string>
     <string name="list_button">List</string>
     <string name="update_button">Update</string>
     <string name="search_button">Search</string>
+    <string name="done_button">Done</string>
+
     <string name="hint">Enter smth...</string>
     <string name="plain_text">Text</string>
     <string name="submit_button">Submit</string>

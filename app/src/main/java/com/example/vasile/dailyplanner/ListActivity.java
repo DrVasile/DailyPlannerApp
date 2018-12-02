@@ -19,7 +19,7 @@ public class ListActivity extends AppCompatActivity {
 
     private TaskDbHelper mHelper;
     private ListView listView;
-    private ArrayAdapter<String> mAdapter;
+    private TaskAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,37 +28,28 @@ public class ListActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.taskList);
         mHelper = new TaskDbHelper(this);
         updateUI();
-
-        /*SQLiteDatabase db = mHelper.getReadableDatabase();
-        Cursor cursor = db.query(TaskContract.TaskEntry.TABLE, new String[]{TaskContract.TaskEntry._ID,
-                                 TaskContract.TaskEntry.COL_TASK_TITLE},
-                        null, null, null, null, null);
-
-        while(cursor.moveToNext()) {
-            int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
-            Log.d(TAG, "Task: " + cursor.getString(idx));
-        }
-
-        cursor.close();
-        db.close();*/
     }
 
     private void updateUI() {
-        ArrayList<String> taskList = new ArrayList<>();
+        ArrayList<TaskModel> taskList = new ArrayList<TaskModel>();
         SQLiteDatabase db = mHelper.getReadableDatabase();
-        Cursor cursor = db.query(TaskContract.TaskEntry.TABLE, new String[]{TaskContract.TaskEntry._ID,
-                        TaskContract.TaskEntry.COL_TASK_TITLE},
+        Cursor cursor = db.query(TaskContract.TaskEntry.TABLE, new String[]{
+                        TaskContract.TaskEntry._ID,
+                        TaskContract.TaskEntry.COL_TASK_TITLE,
+                        TaskContract.TaskEntry.COL_TASK_CONTENT,
+                        TaskContract.TaskEntry.COL_TASK_DATE},
                 null, null, null, null, null);
+
         while (cursor.moveToNext()) {
             int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
-            taskList.add(cursor.getString(idx));
+            String currentTitle = cursor.getString(cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE));
+            String currentContent = cursor.getString(cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_CONTENT));
+            String currentDate = cursor.getString(cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_DATE));
+            taskList.add(new TaskModel(currentTitle, currentContent, currentDate));
         }
 
         if (mAdapter == null) {
-            mAdapter = new ArrayAdapter<>(this,
-                    R.layout.task_layout,
-                    R.id.task_title,
-                    taskList);
+            mAdapter = new TaskAdapter(this, taskList);
             listView.setAdapter(mAdapter);
         } else {
             mAdapter.clear();
