@@ -54,6 +54,8 @@ public class AddActivity extends AppCompatActivity {
 
         mHelper = new TaskDbHelper(this);
         String task = String.valueOf(taskEdit.getText());
+        String date = String.valueOf(dateText.getText());
+        String title = String.valueOf(titleEdit.getText());
         SQLiteDatabase db = mHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
@@ -66,37 +68,3 @@ public class AddActivity extends AppCompatActivity {
         finish();
     }
 }
-
-
-/*  final String xmlFile = "userData.xml";
-    String date = dateText.getText().toString();
-    String title = titleEdit.getText().toString();
-    String task = taskEdit.getText().toString();
-    FileOutputStream outputStream;
-
-        try {
-                outputStream = openFileOutput(xmlFile, Context.MODE_PRIVATE);
-                XmlSerializer xmlSerializer = Xml.newSerializer();
-                StringWriter writer = new StringWriter();
-                xmlSerializer.setOutput(writer);
-                xmlSerializer.startDocument("UTF-8", true);
-                xmlSerializer.startTag(null, "userData");
-                xmlSerializer.startTag(null, "date");
-                xmlSerializer.text(date);
-                xmlSerializer.endTag(null, "date");
-                xmlSerializer.startTag(null,"title");
-                xmlSerializer.text(title);
-                xmlSerializer.endTag(null, "title");
-                xmlSerializer.startTag(null,"task");
-                xmlSerializer.text(task);
-                xmlSerializer.endTag(null, "task");
-                xmlSerializer.endTag(null, "userData");
-                xmlSerializer.endDocument();
-                xmlSerializer.flush();
-                String dataWrite = writer.toString();
-                outputStream.write(dataWrite.getBytes());
-                outputStream.close();
-                } catch (Exception e) {
-                e.printStackTrace();
-                }
-*/
