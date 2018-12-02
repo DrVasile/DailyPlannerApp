@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.vasile.dailyplanner.db.TaskContract;
 import com.example.vasile.dailyplanner.db.TaskDbHelper;
+import com.example.vasile.dailyplanner.notification.ScheduleClient;
 
 import org.xmlpull.v1.XmlSerializer;
 
@@ -31,17 +32,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AddActivity extends AppCompatActivity {
 
     private TaskDbHelper mHelper;
+    private ScheduleClient scheduleClient;
     private String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        scheduleClient = new ScheduleClient(this);
+        scheduleClient.doBindService();
 
         Intent incoming = getIntent();
         date = incoming.getStringExtra(MainActivity.DATE);
@@ -55,11 +60,20 @@ public class AddActivity extends AppCompatActivity {
         EditText taskEdit = (EditText) findViewById(R.id.description);
         TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
 
+        int day = Integer.parseInt(date.substring(8, 10));
+        int month = Integer.parseInt(date.substring(5, 7));;
+        int year = Integer.parseInt(date.substring(0, 4));;
+        int hour = timePicker.getHour();
+        int minutes = timePicker.getMinute();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hour, minutes);
+        scheduleClient.setAlarmForNotification(calendar);
+
         mHelper = new TaskDbHelper(this);
         String task = String.valueOf(taskEdit.getText());
         String title = String.valueOf(titleEdit.getText());
         /* time is in the format yyyy/MM/dd-HH:mm */
-        String time =  date + "-" + String.valueOf(timePicker.getHour()) + ":" + String.valueOf(timePicker.getMinute());
+        String time =  date + "-" + String.valueOf(hour) + ":" + String.valueOf(minutes);
 
         SQLiteDatabase db = mHelper.getWritableDatabase();
         ContentValues values = new ContentValues();

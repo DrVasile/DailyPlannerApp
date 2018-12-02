@@ -19,6 +19,9 @@
         <activity android:name=".AddActivity" />
         <activity android:name=".UpdateActivity" />
         <activity android:name=".ListActivity" />
+
+        <service android:name=".notification.ScheduleService" />
+        <service android:name=".notification.NotifyService" />
     </application>
 
 </manifest>
