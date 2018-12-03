@@ -61,13 +61,14 @@ public class AddActivity extends AppCompatActivity {
         TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
 
         int day = Integer.parseInt(date.substring(8, 10));
-        int month = Integer.parseInt(date.substring(5, 7));;
-        int year = Integer.parseInt(date.substring(0, 4));;
+        int month = Integer.parseInt(date.substring(5, 7)) - 1;
+        int year = Integer.parseInt(date.substring(0, 4));
         int hour = timePicker.getHour();
         int minutes = timePicker.getMinute();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minutes);
         scheduleClient.setAlarmForNotification(calendar);
+        Toast.makeText(this, "Notification set for: "+ day +"/"+ month +"/"+ year + "-" + hour + ":" + minutes, Toast.LENGTH_SHORT).show();
 
         mHelper = new TaskDbHelper(this);
         String task = String.valueOf(taskEdit.getText());
@@ -87,5 +88,12 @@ public class AddActivity extends AppCompatActivity {
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.show();
         finish();
+    }
+
+    @Override
+    protected void onStop() {
+        if(scheduleClient != null)
+            scheduleClient.doUnbindService();
+        super.onStop();
     }
 }
